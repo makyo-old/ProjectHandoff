@@ -1,0 +1,119 @@
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Amaranth', sans-serif;
+}
+
+/*
+General
+*/
+
+#spinner {
+    display: none;
+}
+
+.linkButton {
+    padding: 0.25em;
+    text-decoration: none;
+    font-size: 12pt;
+}
+
+.illuminated:first-letter {
+    font-size: 200%;
+    font-weight: bold;
+    float: left;
+    padding-right: 2px;
+    margin-top: -5px;
+}
+
+.light {
+    font-weight: normal;
+    color: #999;
+}
+
+/*
+Forms
+*/
+.formTable {
+    width: 100%;
+}
+.formTable tbody th {
+    vertical-align: top;
+    text-align: right;
+    width: 33%;
+}
+
+.formTable thead th {
+    width: auto;
+    text-align: center;
+}
+
+/*
+Header
+*/
+#header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dotted #ccc;
+    padding-left: 10%;
+    height: 120px;
+}
+
+/*
+Footer
+*/
+#footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top: 1px dotted #ccc;
+    margin: 0;
+    padding-left: 10%;
+    background-color: #fff;
+    font-size: 80%;
+}
+
+#footer img {
+    vertical-align: middle;
+    height: 40pt;
+    margin-top: 2px;
+}
+
+/*
+User control
+*/
+#userControl {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    height: 120px;
+    overflow: hidden;
+    text-align: right;
+}
+
+/*
+Login Form
+*/
+#loginError {
+    display: none;
+}
+
+#auth {
+    display: none;
+}
+
+/*
+Content
+*/
+
+#contentWrapper {
+    position: relative;
+    top: 120px;
+    width: 80%;
+    padding: 0 10% 0 10%;
+}
