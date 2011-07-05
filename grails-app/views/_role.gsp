@@ -1,0 +1,2 @@
+<g:link controller="role" action="list" class="ui-state-default ui-corner-all linkButton">List</g:link>
+<g:link controller="role" action="create" class="ui-state-default ui-corner-all linkButton">Create</g:link>

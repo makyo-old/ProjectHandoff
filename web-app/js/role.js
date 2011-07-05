@@ -36,3 +36,75 @@ function addField() {
                 </table>");
     $('#numFields').val(numFields);
 }
+
+function editRole() {
+    $('#editButtons .linkButton').toggle();
+    $('#name').html('<input type="text" id="rolename" value="' + $('#name').text() + '" />');
+    $('#description').html('<textarea id="roledescription">' + $('#description').text() + "</textarea>");
+}
+
+function saveRole() {
+    $('#editButtons').append('<span class="removeLater">Saving role...</span>');
+    $('#editButtons .linkButton').hide();
+    $.post(cbURL + 'role/ajax_editRole', {
+        id: $('#id').val(),
+        name: $('#rolename').val(),
+        description: $('#roledescription').val()
+    }, function(data, status, jqXHR) {
+        $('#editButtons .removeLater').remove();
+        if (data.success) {
+            $('#edit').show();
+            $('#name').html($('#rolename').val());
+            $('#description').html($('#roledescription').val());
+        } else {
+            console.log(data);
+            alert("Error saving");
+        }
+    });
+}
+
+function deleteRole() {
+    $('#editButtons').append('<span class="removeLater">Deleting role...</span>');
+    $('#editButtons .linkButton').hide();
+    $.post(cbURL + 'role/ajax_deleteRole', {
+        id: $('#id').val()
+    }, function(data, status, jqXHR) {
+        if (data.success) {
+            window.location = cbURL + 'role/list'
+        } else {
+            $('#editButtons .removeLater').remove();
+            alert("Error deleting");
+        }
+    });
+}
+
+function cancelEditRole() {
+    $('#editButtons .linkButton').toggle();
+    $('#name').html($('#rolename').val());
+    $('#description').html($('#roledescription').val());
+}
+
+function editRoleField(roleFieldId) {
+    $('#field-' + roleFieldId + ' .linkButton').toggle();
+    $('#field-' + roleFieldId + '-name').html('<input type="text" id="edit-field-' 
+        + roleFieldId + '-name" value="' + $('#field-' + roleFieldId + '-name').text() 
+        + '" />');
+    $('#field-' + roleFieldId + '-description').html('<textarea id="edit-field-' 
+        + roleFieldId + '-description">' + $('#field-' + roleFieldId + '-description').text() 
+        + '</textarea>');
+    $('#field-' + roleFieldId + '-repeatability').html('<input type="text" id="edit-field-' 
+        + roleFieldId + '-repeatability" value="' + $('#field-' + roleFieldId + '-rep-text').text() 
+        + '" />');
+}
+
+function saveRoleField(roleFieldId) {
+    // TODO
+}
+
+function deleteRoleField(roleFieldId) {
+    // TODO
+}
+
+function cancelEditRoleField(roleFieldId) {
+    // TODO
+}

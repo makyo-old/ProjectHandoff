@@ -58,7 +58,13 @@
         </sec:ifNotLoggedIn>
       </div>
     </div>
+    <div id="subNavigation">
+      <g:render template="/${subnav ?: 'defaultSubNav'}" />
+    </div>
     <div id="contentWrapper">
+      <div id="messages">
+        <g:if test="${flash.message}">${flash.message}</g:if>
+      </div>
       <h2>${pageProperty(name: 'title').replaceAll(' \\| Project Handoff', '')}</h2>
       <div id="content">
         <g:layoutBody />

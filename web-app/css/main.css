@@ -33,6 +33,14 @@ General
     color: #999;
 }
 
+.even {
+    background-color: #eee;
+}
+
+.odd {
+    background-color: #ddd;
+}
+
 /*
 Forms
 */
@@ -61,6 +69,21 @@ Header
     border-bottom: 1px dotted #ccc;
     padding-left: 10%;
     height: 120px;
+}
+
+#subNavigation {
+    position: absolute;
+    top: 121px;
+    left: 0;
+    right: 0;
+    padding-left: 12%;
+    padding-top: 10px;
+    height: 30px;
+}
+
+#subNavigation .linkButton {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
 }
 
 /*
@@ -113,7 +136,17 @@ Content
 
 #contentWrapper {
     position: relative;
-    top: 120px;
+    top: 140px;
     width: 80%;
-    padding: 0 10% 0 10%;
+    padding: 0 10% 58px 10%;
+}
+
+/*
+Roles
+*/
+
+.listRole {
+    margin: 0;
+    padding: 0.5em;
+    border-top: 1px solid #ccc;
 }
