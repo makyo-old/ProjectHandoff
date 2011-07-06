@@ -21,19 +21,19 @@ class RoleController extends grails.plugins.springsecurity.ui.RoleController {
     @Secured(['ROLE_ROLE_ADMIN'])
     def create = {
         if (request.method == 'POST') {
-            def roleField = new Role(name: params.name, description: params.description).save(flush: true)
+            def role = new Role(name: params.name, description: params.description).save(flush: true)
             if (params.numFields.toInteger() > 0) {
-                log.info (0..<params.numFields.toInteger())
                 (1..params.numFields.toInteger()).each {
                     def field = new RoleField(
-                        role: roleField,
+                        role: role,
                         name: params."rolefield-$it-name",
                         description: params."rolefield-$it-description",
-                        repeatability: params."rolefield-$it-repeatability"
+                        repeatability: params."rolefield-$it-repeatability",
+                        weight: it
                     ).save(flush: true)
                 }
             }
-            redirect action: 'view', params: [id: roleField.id]
+            redirect action: 'view', params: [id: role.id]
         }
     }
    
@@ -72,7 +72,7 @@ class RoleController extends grails.plugins.springsecurity.ui.RoleController {
     }
     
     @Secured(['ROLE_ROLE_ADMIN'])
-    def ajax_editField = {
+    def ajax_editRoleField = {
         def roleField = RoleField.get(params.id)
         if (roleField) {
             roleField.properties = params
@@ -96,6 +96,42 @@ class RoleController extends grails.plugins.springsecurity.ui.RoleController {
             } else {
                 render([success: true] as JSON)
             }
+        }
+    }
+    
+    @Secured(['ROLE_ROLE_ADMIN'])
+    def ajax_saveRoleFieldSort = {
+        def role = Role.get(params.role)
+        if (role) {
+            (0..<params."field[]".size()).each {
+                def roleField = RoleField.get(params."field[]"[it])
+                if (roleField) {
+                    roleField.weight = it
+                    roleField.save()
+                }
+            }
+            role.save(flush: true)
+            render([success: true] as JSON)
+        } else {
+            render([success: false] as JSON)
+        }
+    }
+    
+    @Secured(['ROLE_ROLE_ADMIN'])
+    def createRoleField = {
+        def role = Role.get(params.roleid)
+        if (role) {
+            def roleField = new RoleField()
+            roleField.properties = params
+            roleField.role = role
+            roleField.save(flush: true)
+            if (roleField.hasErrors()) {
+                render([success: false, errors: roleField.errors] as JSON)
+            } else {
+                render([success: true, id: roleField.id] as JSON)
+            }
+        } else {
+            render([success: false] as JSON)
         }
     }
 }

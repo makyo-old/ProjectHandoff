@@ -51,6 +51,7 @@ Forms
     vertical-align: top;
     text-align: right;
     width: 33%;
+    padding-right: 0.25em;
 }
 
 .formTable thead th {
@@ -73,17 +74,28 @@ Header
 
 #subNavigation {
     position: absolute;
-    top: 121px;
+    top: 122px;
     left: 0;
     right: 0;
-    padding-left: 12%;
-    padding-top: 10px;
-    height: 30px;
+    padding: 0 0 0 13%;
+    height: 6px;
+    background-color: #eee;
 }
 
-#subNavigation .linkButton {
-    padding-top: 2px !important;
-    padding-bottom: 2px !important;
+#subNavigation a,
+#subNavigation a:active, 
+#subNavigation a:visited {
+    display: block;
+    float:left;
+    padding: 2px 4px 2px 4px;
+    margin-right: 10px;
+    background-color: #ddd;
+    color: #333;
+    text-decoration: none;
+}
+
+#subNavigation a:hover {
+    background-color: #ccc;
 }
 
 /*
@@ -149,4 +161,22 @@ Roles
     margin: 0;
     padding: 0.5em;
     border-top: 1px solid #ccc;
+}
+
+#sortableFields .row {
+    width: 100%;
+    clear: both;
+    padding-bottom: 0.25em;
+}
+
+#sortableFields .header {
+    float: left;
+    text-align: right;
+    width: 33%;
+    padding-right: 0.25em;
+    margin-right: 0.25em;
+}
+
+#sortableFields .definition {
+    width: 100%;
 }

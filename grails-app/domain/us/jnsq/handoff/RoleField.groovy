@@ -5,7 +5,11 @@ class RoleField {
     String name
     String description
     String repeatability
+    Integer weight
 
     static constraints = {
+    }
+    static mapping = {
+        sort "weight"
     }
 }
