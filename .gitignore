@@ -1,2 +1,3 @@
 *.class
 devDB.*
+stacktrace.log
