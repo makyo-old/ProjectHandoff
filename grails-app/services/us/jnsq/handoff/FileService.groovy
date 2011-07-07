@@ -4,7 +4,9 @@ class FileService {
 
     static transactional = true
 
-    def serviceMethod() {
-
-    }
+    def create(Actor creator, file) {}
+    
+    def update(Actor creator, file) {}
+    
+    def delete(Actor deletor, File file) {}
 }

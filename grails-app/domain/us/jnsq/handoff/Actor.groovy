@@ -10,12 +10,14 @@ class Actor {
     static constraints = {
     }
     static hasMany = [ 
-        handoffsTo: Handoff,
-        handoffsFrom: Handoff,
+        interactionsTo: Interaction,
+        interactionsFrom: Interaction,
+        interactionsIntermediated: Interaction,
         files: File
     ]
     static mappedBy = [
-        handoffsTo: "to",
-        handoffsFrom: "from"
+        interactionsTo: "to",
+        interactionsFrom: "from",
+        interactionsIntermediated: "intermediary"
     ]
 }

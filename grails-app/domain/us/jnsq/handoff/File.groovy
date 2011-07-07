@@ -10,6 +10,6 @@ class File {
     static hasMany = [
         permissions: FilePermissions,
         versions: FileVersion,
-        handoffs: Handoff
+        interactions: Interaction
     ]
 }

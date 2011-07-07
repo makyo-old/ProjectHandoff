@@ -1,14 +1,15 @@
 package us.jnsq.handoff
 
-class Handoff {
+class Interaction {
     FileVersion fileVersion
     Date dateCreated
     String notes
     String visibility
     Actor from
     Actor to
+    Actor intermediary
 
     static constraints = {
     }
-    static hasMany = [ fields: HandoffRoleField ]
+    static hasMany = [ fields: InteractionRoleField ]
 }

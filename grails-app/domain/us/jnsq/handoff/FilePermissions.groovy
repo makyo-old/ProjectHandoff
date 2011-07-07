@@ -2,12 +2,11 @@ package us.jnsq.handoff
 
 class FilePermissions {
     Actor actor
+    File file
     boolean write
-    boolean claim
     boolean read
-    boolean handoff
+    boolean interact
 
     static constraints = {
     }
-    static belongsTo = [file: File]
 }

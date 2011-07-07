@@ -2,7 +2,7 @@ package us.jnsq.handoff
 
 import grails.test.*
 
-class FileControlServiceTests extends GrailsUnitTestCase {
+class PermissionsServiceTests extends GrailsUnitTestCase {
     protected void setUp() {
         super.setUp()
     }

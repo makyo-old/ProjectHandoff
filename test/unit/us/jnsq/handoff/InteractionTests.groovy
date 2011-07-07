@@ -1,8 +1,8 @@
-package projecthandoff
+package us.jnsq.handoff
 
 import grails.test.*
 
-class HandoffServiceTests extends GrailsUnitTestCase {
+class InteractionTests extends GrailsUnitTestCase {
     protected void setUp() {
         super.setUp()
     }

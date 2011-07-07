@@ -1,7 +1,7 @@
 package us.jnsq.handoff
 
-class HandoffRoleField {
-    Handoff handoff
+class InteractionRoleField {
+    Interaction interaction
     RoleField roleField
     String value
 

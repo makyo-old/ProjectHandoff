@@ -3,6 +3,7 @@ package us.jnsq.handoff
 class Role {
     String name
     String description
+    FilePermissions permissionsMask
 
     static mapping = {
         table 'handoff_role'
