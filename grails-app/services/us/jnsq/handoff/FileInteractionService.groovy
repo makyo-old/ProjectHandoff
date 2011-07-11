@@ -1,45 +1,60 @@
 package us.jnsq.handoff
 
-/*
- * Files may be moved amongst actors or between an actor and the docket by three
- * actors (handoffs), two actors (assignments/retractions), or one actor
- * (claims/relinquishments)
- * 
- */
+import org.springframework.security.access.AccessDeniedException
+
 class FileInteractionService {
 
     static transactional = true
     
-    def handoff(File file, Actor from, Actor to, Actor assigner) {
-        // check permissions
-            // canHandoff(from) && canHandoff(to) && canHandoff(assigner)
-        
-        // create handoff with three actors
+    def permissionService
+    
+    // TODO: switch from this to ACLs
+    def can = permissionService.hasPermission
+    
+    def handoff(File file, Actor to, Actor assigner = null) {
+        if (assigner) {
+            if (!can(assigner, "administrate", file)) {
+                throw new AccessDeniedException()
+            }
+        } else {
+            assigner = file.currentOwner
+        }
+        if ([file.currentOwner, to, assigner].inject(true) { res, who -> res && can(who, "interact", file) }) {
+            new Interaction(file: file, from: from, to: to, intermediary: assigner)
+        } else {
+            throw new AccessDeniedException()
+        }
     }
     
     def assign(File file, Actor assignee, Actor assigner) {
-        // check permissions
-            // canHandoff(assignee) && canHandoff(assigner)
-        
-        // create handoff with two actors
+        if (file.currentOwner == null && [assignee, assigner].inject(true) { res, who -> res && can(who, "interact", file) }) {
+            new Interaction(file: file, from: file.currentOwner, to: assignee, intermediary: assigner)
+        } else {
+            throw new AccessDeniedException()
+        }
     }
     
-    def retract(File file, Actor retractee, Actor retractor) {
-        // check permissions
-            // canHandoff(retractee) && canHandoff(retractor)
-        
-        // create handoff with two actors
+    def retract(File file, Actor retractor) {
+        if ([retractor, file.currentOwner].inject(true) { res, who -> res && can(who, "interact", file) }) {
+            
+        } else {
+            throw new AccessDeniedException()
+        }
     }
     
     def claim(File file, Actor claimer) {
-        // check permissions
-        
-        // create handoff with one actor
+        if (file.currentOwner == null && can(claimer, "interact", file)) {
+            
+        } else {
+            throw new AccessDeniedException()
+        }
     }
     
-    def relinquish(File file, Actor relinquisher) {
-        // check permissions
-        
-        // create handoff with one actor
+    def relinquish(File file) {
+        if (can(file.currentOwner, "interact", file)) {
+            
+        } else {
+            throw new AccessDeniedException()
+        }
     }
 }

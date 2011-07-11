@@ -6,6 +6,7 @@ class FilePermissions {
     boolean write
     boolean read
     boolean interact
+    boolean administrate
 
     static constraints = {
     }

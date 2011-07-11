@@ -1,7 +1,7 @@
 package us.jnsq.handoff
 
 class Interaction {
-    FileVersion fileVersion
+    File file
     Date dateCreated
     String notes
     String visibility
