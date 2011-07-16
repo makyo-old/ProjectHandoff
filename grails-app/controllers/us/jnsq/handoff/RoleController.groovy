@@ -13,7 +13,7 @@ class RoleController extends grails.plugins.springsecurity.ui.RoleController {
     
     def list = {
         [roles: Role.list([
-            max: Math.min(params.max?.toInteger() ?: 16, 100),
+            max: Math.min(params.max ? params.int('max') : 16, 100),
             offset: params.offset?.toInteger() ?: 0
         ])]
     }

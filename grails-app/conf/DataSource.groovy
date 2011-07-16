@@ -14,7 +14,11 @@ environments {
     development {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-            url = "jdbc:hsqldb:mem:devDB"
+            url = "jdbc:postgresql://192.168.1.1:5432/handoff_dev"
+            driverClassName = "org.postgresql.Driver"
+            username = "makyo"
+            password = "makyo"
+            dialect = org.hibernate.dialect.PostgreSQLDialect
         }
     }
     test {
