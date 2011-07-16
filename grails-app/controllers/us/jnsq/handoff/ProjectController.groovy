@@ -19,7 +19,16 @@ class ProjectController {
     }
     
     @Secured(['ROLE_USER'])
-    def invite = { }
+    def invite = {
+        def project = Project.get(params.project.id)
+        def user = User.findByUsername(params.user.username)
+        def role = Role.get(params.role.id)
+        if (project == null || user == null || role == null) {
+            response.sendError(404)
+        } else {
+            [ppa: projectService.invite(project, user, role, params.notes)]
+        }
+    }
     
     @Secured(['ROLE_USER'])
     def apply = { }

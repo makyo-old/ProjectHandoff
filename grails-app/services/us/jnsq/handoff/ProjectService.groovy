@@ -23,23 +23,23 @@ class ProjectService {
         Project.get id
     }
     
-    @PreAuthorize("hasPermission(#id, 'us.jnsq.handoff.project', admin)")
-    def invite(long id, User user, Role role, String notes) {}
+    @PreAuthorize("hasPermission(#project, admin)")
+    def invite(Project project, User user, Role role, String notes) {}
     
     @PreAuthorize("hasRole('ROLE_USER')")
-    def apply(long id, User user, Role role, String notes) {}
+    def apply(Project project, User user, Role role, String notes) {}
     
     @PreAuthorize("hasRole('ROLE_USER')")
-    def join() {}
+    def join(Project project, Role role) {}
     
     @PreAuthorize("hasPermission(#project, admin)")
-    def approveApplication(Project project) {}
+    def approveApplication(Project project, PotentialProjectActor ppa) {}
     
     @PreAuthorize("hasPermission(#project, read)")
-    def acceptInvitation(Project project) {}
+    def acceptInvitation(Project project, PotentialProjectActor ppa) {}
     
     @PreAuthorize("hasRole('ROLE_USER')")
-    def leave() {}
+    def leave(Project project) {}
     
     @PreAuthorize("hasPermission(#project, admin)")
     def eject(Project project, Actor actor) {}
@@ -50,10 +50,10 @@ class ProjectService {
     
     @Transactional
     @PreAuthorize("hasPermission(#id, 'us.jnsq.handoff.project', admin)")
-    def edit() {}
+    def edit(params) {}
     
     @PreAuthorize("hasPermission(#project, delete) or hasPermission(#project, admin)")
-    def delete() {}
+    def delete(Project project) {}
     
     void addPermission(Project project, String username, int permission) {
         addPermission report, username, aclPermissionFactory.buildFromMask(permission)
