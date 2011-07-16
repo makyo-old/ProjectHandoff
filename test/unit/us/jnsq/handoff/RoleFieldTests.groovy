@@ -2,7 +2,7 @@ package us.jnsq.handoff
 
 import grails.test.*
 
-class ProjectRoleFieldTests extends GrailsUnitTestCase {
+class RoleFieldTests extends GrailsUnitTestCase {
     protected void setUp() {
         super.setUp()
     }

@@ -14,7 +14,9 @@ class ProjectController {
     }
     
     @Secured(['ROLE_USER'])
-    def view = { }
+    def view = { 
+        [project: projectService.view(params.id)]
+    }
     
     @Secured(['ROLE_USER'])
     def invite = { }

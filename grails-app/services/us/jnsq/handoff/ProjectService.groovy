@@ -5,7 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.acls.domain.BasePermission
 import org.springframework.security.acls.model.Permission
 import org.springframework.transaction.annotation.Transactional
-
+import us.jnsq.handoff.security.User
 
 class ProjectService {
 
@@ -24,10 +24,10 @@ class ProjectService {
     }
     
     @PreAuthorize("hasPermission(#id, 'us.jnsq.handoff.project', admin)")
-    def invite() {}
+    def invite(long id, User user, Role role, String notes) {}
     
     @PreAuthorize("hasRole('ROLE_USER')")
-    def apply() {}
+    def apply(long id, User user, Role role, String notes) {}
     
     @PreAuthorize("hasRole('ROLE_USER')")
     def join() {}

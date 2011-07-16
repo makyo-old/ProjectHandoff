@@ -2,7 +2,7 @@ package us.jnsq.handoff
 
 import grails.test.*
 
-class ProjectFileVersionTests extends GrailsUnitTestCase {
+class FileVersionTests extends GrailsUnitTestCase {
     protected void setUp() {
         super.setUp()
     }
