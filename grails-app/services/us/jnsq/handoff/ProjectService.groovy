@@ -37,6 +37,9 @@ class ProjectService {
     
     @PreAuthorize("hasPermission(#project, read)")
     def acceptInvitation(Project project, PotentialProjectActor ppa) {}
+
+    @PreAuthorize("hasPermission(#ppa.project, read) or hasPermission(#ppa.project, admin)")
+    def ppa(PotentialProjectActor ppa) {}
     
     @PreAuthorize("hasRole('ROLE_USER')")
     def leave(Project project) {}
