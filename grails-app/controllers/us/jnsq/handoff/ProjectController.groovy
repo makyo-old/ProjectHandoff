@@ -43,25 +43,72 @@ class ProjectController {
         }
     }
     
+    def join = {
+        def project = Project.get(params.project.id)
+        def role = Role.get(params.role.id)
+        if (project && role) {
+            projectService.join(params.id)
+            redirect action: 'view', id: params.id
+        } else {
+            response.sendError(404)
+        }
+    }
+    
     def approveApplication = {
         def ppa = PotentialProjectActor.get(params.id)
         projectService.approveApplication(ppa)
         redirect action: 'view', id: ppa.project.id
     }
 
-    def acceptInvitation = {}
+    def acceptInvitation = {
+        def ppa = PotentialProjectActor.get(params.id)
+        projectService.acceptInvitation(ppa)
+        redirect action: 'view', id: ppa.project.id
+    }
 
-    def ppa = { }
+    def ppa = {
+        [ppa: projectService.ppa(params.id)]
+    }
     
-    def join = { }
+    def leave = {
+        def project = Project.get(params.id)
+        if (!project) {
+            response.sendError(404)
+        }
+        projectService.leave(project)
+        redirect action: 'list'
+    }
     
-    def leave = { }
+    def eject = {
+        def project = Project.get(params.project.id)
+        def user = User.findByUsername(params.user.username)
+        if (project && user) {
+            def actor = Actor.findByUserAndProject(user, project)
+            projectService.eject(project, actor)
+            redirect action: 'view', id: project.id
+        } else {
+            response.sendError(404)
+        }
+    }
     
-    def eject = { }
+    def create = {}
     
-    def create = { }
+    def edit = {
+        [project: Project.get(params.id)
+    }
     
-    def edit = { }
-    
-    def delete = { }
+    def delete = {
+        def project = Project.get(params.id)
+        projectService.delete(project)
+        redirect action: 'list'
+    }
+
+    def save = {
+        if (params.id) {
+            projectService.edit(params)
+        } else {
+            params.id = projectService.create(params).id
+        }
+        redirect action: 'view', id: params.id
+    }
 }

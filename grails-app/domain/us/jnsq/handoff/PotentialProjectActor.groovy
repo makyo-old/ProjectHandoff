@@ -8,6 +8,6 @@ class PotentialProjectActor {
     String type
 
     static constraints = {
-        type blank: false, inList: ["Invitation", "Application"]
+        type blank: false, inList: ["invitation", "application"]
     }
 }
