@@ -1,5 +1,7 @@
 package us.jnsq.handoff
 
+import us.jnsq.handoff.security.User
+
 class PotentialProjectActor {
     User user
     Role role

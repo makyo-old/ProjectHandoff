@@ -3,9 +3,11 @@ package us.jnsq.handoff
 class Project {
     String name
     String description
-    String visibility = "Everyone"
+    String visibility = "all"
     String joinMethod = "Invite only"
     boolean completed = false
+    Date dateCreated
+    Date lastUpdated
 
     static constraints = {
         visibility blank: false, inList: ["all", "loggedIn", "desiredRoles", "actors"]

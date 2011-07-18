@@ -19,6 +19,7 @@ environments {
             username = "makyo"
             password = "makyo"
             dialect = org.hibernate.dialect.PostgreSQLDialect
+            loggingSql = true
         }
     }
     test {

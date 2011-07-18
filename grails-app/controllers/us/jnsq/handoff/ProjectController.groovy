@@ -9,14 +9,14 @@ class ProjectController {
     
     def projectService
 
-    @Secured(['ROLE_ANONYMOUS'])
+    @Secured(['ROLE_USER', 'ROLE_ANONYMOUS'])
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 16, 100)
         [projects: projectService.list(params)]
     }
     
     def view = { 
-        [project: projectService.view(params.id)]
+        [project: projectService.view(params.int('id'))]
     }
     
     def invite = {
@@ -94,7 +94,7 @@ class ProjectController {
     def create = {}
     
     def edit = {
-        [project: Project.get(params.id)
+        [project: Project.get(params.id)]
     }
     
     def delete = {
@@ -104,6 +104,7 @@ class ProjectController {
     }
 
     def save = {
+        log.info "saving..."
         if (params.id) {
             projectService.edit(params)
         } else {

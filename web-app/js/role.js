@@ -46,7 +46,7 @@ function editRole() {
 function saveRole() {
     $('#editButtons').append('<span class="removeLater">Saving role...</span>');
     $('#editButtons .linkButton').hide();
-    $.post(cbURL + 'role/ajax_editRole', {
+    $.post(cbURL + 'rolAjax/editRole', {
         id: $('#id').val(),
         name: $('#rolename').val(),
         description: $('#roledescription').val()
@@ -66,7 +66,7 @@ function saveRole() {
 function deleteRole() {
     $('#editButtons').append('<span class="removeLater">Deleting role...</span>');
     $('#editButtons .linkButton').hide();
-    $.post(cbURL + 'role/ajax_deleteRole', {
+    $.post(cbURL + 'roleAjax/deleteRole', {
         id: $('#id').val()
     }, function(data, status, jqXHR) {
         if (data.success) {
@@ -100,7 +100,7 @@ function editRoleField(roleFieldId) {
 function saveRoleField(roleFieldId) {
     $('#field-' + roleFieldId).append('<span class="removeLater">Saving field...</span>');
     $('#field-' + roleFieldId + ' .linkButton').hide();
-    $.post(cbURL + 'role/ajax_editRoleField', {
+    $.post(cbURL + 'roleAjax/editRoleField', {
         id: roleFieldId,
         name: $('#edit-field-' + roleFieldId + '-name').val(),
         description: $('#edit-field-' + roleFieldId + '-description').val(),
@@ -127,7 +127,7 @@ function saveRoleField(roleFieldId) {
 function deleteRoleField(roleFieldId) {
     $('#field-' + roleFieldId).append('<span class="removeLater">Saving field...</span>');
     $('#field-' + roleFieldId + ' .linkButton').hide();
-    $.post(cbURL + 'role/ajax_deleteRoleField', {
+    $.post(cbURL + 'roleAjax/deleteRoleField', {
         id: roleFieldId
     }, function(data, status, jqXHR) {
         if (data.success) {
@@ -151,6 +151,45 @@ function cancelEditRoleField(roleFieldId) {
     );
 }
 
+function createRoleFieldInRole() {
+    $('#createField').append('<span class="removeLater">Adding field...</span>');
+    $('#createField .linkButton').hide();
+    console.log("creating role");
+    $.post(cbURL + 'roleAjax/createRoleField', {
+        'role.id': $('#edit-field-new-roleid').val(),
+        name: $('#edit-field-new-name').val(),
+        description: $('#edit-field-new-description').val(),
+        repeatability: $('#edit-field-new-repeatability').val(),
+        weight: $('#edit-field-new-weight').val()
+    }, function(data, status, jqXHR) {
+        $('#createField .removeLater').remove();
+        if (data.success) {
+            $('#sortableFields').append('<div id="field-' + data.id + '" class="row">'
+                + '<div class="ui-state-active ui-corner-left header">'
+                + '<span id="field-' + data.id + '-name">' + $('#edit-field-new-name').val() + '</span>'
+                + '<p>'
+                + '<a href="javascript:void(0)" onclick="editRoleField(' + data.id + ')" id="edit-' + data.id + '" class="ui-state-default ui-corner-all linkButton">Edit</a>'
+                + '<a href="javascript:void(0)" onclick="saveRoleField(' + data.id + ')" class="ui-state-default ui-corner-all linkButton" style="display: none">Save</a>'
+                + '<a href="javascript:void(0)" onclick="deleteRoleField(' + data.id + ')" class="ui-state-default ui-corner-all linkButton" style="display: none">Delete</a>'
+                + '<a href="javascript:void(0)" onclick="cancelEditRoleField(' + data.id + ')" class="ui-state-default ui-corner-all linkButton" style="display: none">Cancel</a>'
+                + '</p>'
+                + '</div>'
+                + '<div class="definition">'
+                + '<p id="field-' + data.id + '-description">' + $('#edit-field-new-description').val() + '</p>'
+                + '<input type="hidden" id="field-' + data.id + '-rep-text" value="' + $('#edit-field-new-repeatability').val + '" />'
+                + '<p class="light" id="field-' + data.id + '-repeatability">'
+                + (isNaN(parseInt($('#edit-field-new-repeatability').val())) ? {'+': 'One or more times', '?': 'Zero or one times', '*': 'Zero or more times'}[$('#edit-field-new-repeatability').val()] : 'Repeat ' + $('#edit-field-new-repeatability').val() + ' time' + (parseInt($('#edit-field-new-repeatability').val()) == 1 ? '' : 's'))
+                + '</p>'
+                + '</div>'
+            );
+            $('#edit-field-new-weight').val(parseInt($('#edit-field-new-weight').val()) + 1);
+            cancelCreateRoleFieldInRole();
+        } else {
+            alert("Error creating field");
+        }
+    });
+}
+
 function cancelCreateRoleFieldInRole() {
     $('#createField').hide();
     $('#edit-field-new-name').val('');
@@ -164,7 +203,7 @@ function enableSortFields() {
         handle: '.header',
         axis: 'y',
         stop: function(event, ui) {
-            $.get(cbURL + 'role/ajax_saveRoleFieldSort?role=' + $('#id').val() + '&' + $('#sortableFields').sortable('serialize'),
+            $.get(cbURL + 'roleAjax/saveRoleFieldSort?role=' + $('#id').val() + '&' + $('#sortableFields').sortable('serialize'),
             function(data, status, jqXHR) {
                 if (data.success) {
                     console.log("Sorted");

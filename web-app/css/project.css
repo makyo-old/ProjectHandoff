@@ -1,0 +1,28 @@
+#workspace {
+    width: 100%;
+    height: 500px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+#projectInfo {
+    width: 33%;
+    height: 100%;
+    margin-left: 0.5%;
+    float: left;
+}
+
+#projectFiles {
+    width: 66%;
+    height: 245px;
+    margin-bottom: 2px;
+    float: left;
+}
+
+#projectActors {
+    width: 66%;
+    height: 245px;
+    float: left;
+}

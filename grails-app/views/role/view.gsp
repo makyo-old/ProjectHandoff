@@ -23,7 +23,7 @@
     <h3>Description</h3>
     <p id="description">${role.description}</p>
     <p style="text-align: right;" id="editButtons">
-      <a href="javascript:void(0)" onclick="editRole()" id="edit" class="ui-state-default ui-corner-all linkButton">Edit</a>
+      <a href="javascript:void(0)" onclick="editRole()" id="edit" class="ui-state-default ui-corner-all linkButton editButton">Edit</a>
       <a href="javascript:void(0)" onclick="saveRole()" class="ui-state-default ui-corner-all linkButton" style="display: none">Save</a>
       <a href="javascript:void(0)" onclick="deleteRole()" class="ui-state-default ui-corner-all linkButton" style="display: none">Delete</a>
       <a href="javascript:void(0)" onclick="cancelEditRole()" class="ui-state-default ui-corner-all linkButton" style="display: none">Cancel</a>
@@ -52,31 +52,29 @@
           </div>
         </div>
       </g:each>
-      <div id="createField" class="row" style="display: none;">
-        <g:form controller="role" action="createRoleField" method="post">
-          <div class="ui-state-active ui-corner-left header">
-            <input type="text" id="edit-field-new-name" name="name" />
-            <p>
-              <g:submitButton name="Submit" value="Save" class="ui-state-default ui-corner-all linkButton" />
-              <a href="javascript:void(0)" onclick="cancelCreateRoleFieldInRole()" class="ui-state-default ui-corner-all linkButton">Cancel</a>
-            </p>
-            <input type="hidden" name="roleid" value="${role.id}" />
-            <input type="hidden" name="weight" value="${role.fields.size() + 1}" />
-          </div>
-          <div class="definition">
-            <p><textarea id="edit-field-new-description" name="description"></textarea></p>
-            <p>
-              <input type="text" id="edit-field-new-repeatability" value="1" name="repeatability" /><br />
-              <a href="javascript:void(0)" onclick="$('#edit-field-new-repeatability').val('?')">Zero or one times</a>
-              <a href="javascript:void(0)" onclick="$('#edit-field-new-repeatability').val('+')">One or more times</a>
-              <a href="javascript:void(0)" onclick="$('#edit-field-new-repeatability').val('*')">Zero or more times</a>
-            </p>
-          </div>
-        </g:form>
+    </div>
+    <div id="createField" class="row" style="display: none;">
+      <div class="ui-state-active ui-corner-left header">
+        <input type="text" id="edit-field-new-name" />
+        <p>
+          <a href="javascript:void(0)" onclick="createRoleFieldInRole()" class="ui-state-default ui-corner-all linkButton">Save</a>
+          <a href="javascript:void(0)" onclick="cancelCreateRoleFieldInRole()" class="ui-state-default ui-corner-all linkButton">Cancel</a>
+        </p>
+        <input type="hidden" id="edit-field-new-roleid" value="${role.id}" />
+        <input type="hidden" id="edit-field-new-weight" value="${role.fields.size() + 1}" />
       </div>
-      <div class="row" style="text-align: right">
-        <a href="javascript:void(0)" onclick="$('#createField').show(); $(this).hide();" id="addFieldButton" class="ui-state-default ui-corner-all linkButton">Add field...</a>
+      <div class="definition">
+        <p><textarea id="edit-field-new-description"></textarea></p>
+        <p>
+          <input type="text" id="edit-field-new-repeatability" value="1" /><br />
+          <a href="javascript:void(0)" onclick="$('#edit-field-new-repeatability').val('?')">Zero or one times</a>
+          <a href="javascript:void(0)" onclick="$('#edit-field-new-repeatability').val('+')">One or more times</a>
+          <a href="javascript:void(0)" onclick="$('#edit-field-new-repeatability').val('*')">Zero or more times</a>
+        </p>
       </div>
+    </div>
+    <div class="row" style="text-align: right">
+      <a href="javascript:void(0)" onclick="$('#createField').show(); $(this).hide();" id="addFieldButton" class="ui-state-default ui-corner-all linkButton">Add field...</a>
     </div>
   </body>
 </html>

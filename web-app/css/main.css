@@ -169,7 +169,7 @@ Roles
     padding-bottom: 0.25em;
 }
 
-#sortableFields .header {
+.row .header {
     float: left;
     text-align: right;
     width: 33%;
@@ -177,6 +177,6 @@ Roles
     margin-right: 0.25em;
 }
 
-#sortableFields .definition {
+.row .definition {
     width: 100%;
 }

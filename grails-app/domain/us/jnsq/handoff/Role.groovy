@@ -9,6 +9,7 @@ class Role {
         table 'handoff_role'
     }
     static constraints = {
+        permissionsMask nullable: true
     }
     static hasMany = [ actors: Actor, fields: RoleField ]
 }

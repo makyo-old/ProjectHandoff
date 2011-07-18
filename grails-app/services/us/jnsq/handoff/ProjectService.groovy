@@ -20,35 +20,42 @@ class ProjectService {
         Project.withCriteria {
             if (user) {
                 or {
-                    "in"("visibility", ["everyone", "loggedIn"])
-                    and {
-                        eq("visibility", "desiredRoles")
-                        desiredRoles {
-                            "in"("id", user.roles)
+                    "in"("visibility", ["all", "loggedIn"])
+                    if (user.roles.size() > 0) {
+                        and {
+                            eq("visibility", "desiredRoles")
+                            desiredRoles {
+                                "in"("id", user.roles)
+                            }
                         }
                     }
-                    and {
-                        eq("visibility", "actors")
-                        actors {
-                            "in"("id", user.actors)
+                    if (user.actors.size() > 0) {
+                        and {
+                            eq("visibility", "actors")
+                            actors {
+                                "in"("id", user.actors)
+                            }
                         }
                     }
                 }
             } else {
-                eq("visibility", "Everyone")
+                eq("visibility", "all")
+            }
         }
     }
     
-    @PreAuthorize("hasPermission(#id, 'us.jnsq.handoff.project', read) or hasPermission(#id, 'us.jnsq.handoff.project', 'admin')")
+    @PreAuthorize("hasPermission(#id, 'us.jnsq.handoff.Project', read) or hasPermission(#id, 'us.jnsq.handoff.Project', admin)")
     def view(long id) {
-        Project.get(id)
+        def project = Project.get(id)
+        log.info project
+        project
     }
     
     @Transactional
     @PreAuthorize("hasPermission(#project, admin)")
     def invite(Project project, User user, Role role, String notes) {
         new PotentialProjectActor(
-            project: project
+            project: project,
             user: user,
             role: role,
             notes: notes,
@@ -61,7 +68,7 @@ class ProjectService {
     def apply(Project project, User user, Role role, String notes) {
         if (project.joinMethod == "applyDesired" && role in project.desiredRoles) {
             new PotentialProjectActor(
-                project: project
+                project: project,
                 user: user,
                 role: role,
                 notes: notes,
@@ -102,7 +109,13 @@ class ProjectService {
     
     @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
-    def create(params) {}
+    def create(params) {
+        def project = new Project()
+        project.properties = params
+        project.save(flush: true)
+        addPermission(project, springSecurityService.authentication.name, BasePermission.ADMINISTRATION)
+        project
+    }
     
     @Transactional
     @PreAuthorize("hasPermission(#id, 'us.jnsq.handoff.project', admin)")
@@ -113,13 +126,13 @@ class ProjectService {
     def delete(Project project) {}
     
     void addPermission(Project project, String username, int permission) {
-        addPermission(report, username, aclPermissionFactory.buildFromMask(permission))
+        addPermission(project, username, aclPermissionFactory.buildFromMask(permission))
     }
     
     @Transactional
     @PreAuthorize("hasPermission(#project, admin)")
     void addPermission(Project project, String username, Permission permission) {
-        aclUtilService.addPermission(report, username, permission)
+        aclUtilService.addPermission(project, username, permission)
     }
     
     @Transactional
@@ -131,7 +144,6 @@ class ProjectService {
                 acl.deleteAce(i)
             }
         }
-
         aclService.updateAcl(acl)
     }
 }
