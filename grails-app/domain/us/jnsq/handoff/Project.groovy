@@ -1,10 +1,13 @@
 package us.jnsq.handoff
 
+import us.jnsq.handoff.security.User
+
 class Project {
     String name
     String description
     String visibility = "all"
     String joinMethod = "Invite only"
+    User lead
     boolean completed = false
     Date dateCreated
     Date lastUpdated

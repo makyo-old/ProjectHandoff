@@ -14,6 +14,7 @@ class ProjectService {
     def aclPermissionFactory
     def aclUtilService
     def springSecurityService
+    def ppaService
     
     def list(params) {
         def user = springSecurityService.currentUser
@@ -54,26 +55,14 @@ class ProjectService {
     @Transactional
     @PreAuthorize("hasPermission(#project, admin)")
     def invite(Project project, User user, Role role, String notes) {
-        new PotentialProjectActor(
-            project: project,
-            user: user,
-            role: role,
-            notes: notes,
-            type: "invitation"
-        ).save(flush: true)
+        ppaService.create(project, user, role, notes, "invitation")
     }
     
     @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
     def apply(Project project, User user, Role role, String notes) {
         if (project.joinMethod == "applyDesired" && role in project.desiredRoles) {
-            new PotentialProjectActor(
-                project: project,
-                user: user,
-                role: role,
-                notes: notes,
-                type: "application"
-            ).save(flush: true)
+            ppaService.create(project, user, role, notes, "application")
         } else {
             throw new AccessDeniedException()
         }
@@ -92,15 +81,6 @@ class ProjectService {
         }
     }
     
-    @PreAuthorize("hasPermission(#ppa.project, admin)")
-    def approveApplication(PotentialProjectActor ppa) {}
-    
-    @PreAuthorize("hasPermission(#ppa.project, read)")
-    def acceptInvitation(PotentialProjectActor ppa) {}
-
-    @PreAuthorize("hasPermission(#ppa, read) or hasPermission(#ppa.project, read) or hasPermission(#ppa.project, admin)")
-    def ppa(PotentialProjectActor ppa) {}
-    
     @PreAuthorize("hasRole('ROLE_USER')")
     def leave(Project project) {}
     
@@ -111,6 +91,7 @@ class ProjectService {
     @PreAuthorize("hasRole('ROLE_USER')")
     def create(params) {
         def project = new Project()
+        project.lead = springSecurityService.currentUser
         project.properties = params
         project.save(flush: true)
         addPermission(project, springSecurityService.authentication.name, BasePermission.ADMINISTRATION)
