@@ -6,6 +6,7 @@ class Actor {
     Project project
     User user
     Role role
+    boolean active = true
 
     static constraints = {
     }

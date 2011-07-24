@@ -81,11 +81,31 @@ class ProjectService {
         }
     }
     
-    @PreAuthorize("hasRole('ROLE_USER')")
-    def leave(Project project) {}
+    @PreAuthorize("hasPermission(#project, read) and not hasPermission(#project, admin)")
+    def leave(Project project, Actor actor) {
+        if (actor.project == project && actor.user.username == springSecurityService.authentication.name) {
+            actor.active = false
+            actor.save(flush: true)
+        } else {
+            throw new AccessDeniedException()
+        }
+    }
     
     @PreAuthorize("hasPermission(#project, admin)")
-    def eject(Project project, Actor actor) {}
+    def eject(Project project, Actor actor) {
+        def acl = aclUtilService.readAcl(project)
+        acl.entries.eachWithIndex { entry, i ->
+            if (entry.sid.equals(actor.user.username) && entry.permission.equals(BasePermission.ADMINISTRATION)) {
+                throw new AccessDeniedException()
+            }
+        }
+        if (actor.project == project) {
+            actor.active = false
+            actor.save(flush: true)
+        } else {
+            throw new AccessDeniedException()
+        }
+    }
     
     @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -99,12 +119,28 @@ class ProjectService {
     }
     
     @Transactional
-    @PreAuthorize("hasPermission(#id, 'us.jnsq.handoff.project', admin)")
-    def edit(params) {}
+    @PreAuthorize("hasPermission(#params.id, 'us.jnsq.handoff.project', admin)")
+    def edit(params) {
+        def project = Project.get(params.id)
+        project.properties = params
+        project.save(flush: true)
+    }
     
     @Transactional
     @PreAuthorize("hasPermission(#project, delete) or hasPermission(#project, admin)")
-    def delete(Project project) {}
+    def delete(Project project) {
+        project.delete(flush: true)
+    }
+    
+    @PreAuthorize("hasPermission(#project, admin)")
+    def makeAdmin(Project project, String username) {
+        addPermission(project, actor.user.username, BasePermission.ADMINISTRATION)
+    }
+    
+    @PreAuthorize("hasPermission(#project, admin)")
+    def relinquishAdmin(Project project) {
+        removePermission(project, springSecurityService.authentication.name, BasePermission.ADMINISTRATION)
+    }
     
     void addPermission(Project project, String username, int permission) {
         addPermission(project, username, aclPermissionFactory.buildFromMask(permission))

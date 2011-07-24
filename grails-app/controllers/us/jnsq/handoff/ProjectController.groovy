@@ -25,7 +25,7 @@ class ProjectController {
         def role = Role.get(params.role.id)
         if (project && role && user) {
             def ppa = projectService.invite(project, user, role, params.notes)
-            redirect action: 'ppa', id: ppa.id
+            redirect controller: 'ppa', action: 'view', id: ppa.id
         } else {
             response.sendError(404)
         }
@@ -37,7 +37,7 @@ class ProjectController {
         def role = Role.get(params.role.id)
         if (project && user && role) {
             def ppa = projectService.apply(project, user, role, params.notes)
-            redirect action: 'ppa', id: ppa.id
+            redirect controller: 'ppa', action: 'view', id: ppa.id
         } else {
             response.sendError(404)
         }
@@ -64,10 +64,6 @@ class ProjectController {
         def ppa = PotentialProjectActor.get(params.id)
         projectService.acceptInvitation(ppa)
         redirect action: 'view', id: ppa.project.id
-    }
-
-    def ppa = {
-        [ppa: projectService.ppa(params.id)]
     }
     
     def leave = {

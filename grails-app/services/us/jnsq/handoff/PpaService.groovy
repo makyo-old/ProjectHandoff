@@ -1,6 +1,7 @@
 package us.jnsq.handoff
 
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.access.prepost.PostFilter
 import org.springframework.security.acls.domain.BasePermission
 import org.springframework.security.acls.model.Permission
 import org.springframework.transaction.annotation.Transactional
@@ -14,30 +15,74 @@ class PpaService {
     def aclPermissionFactory
     def aclUtilService
     def springSecurityService
+    def projectService
 
     @PreAuthorize("hasPermission(#id, 'us.jnsq.handoff.PotentialProjectActor', read) or hasPermission(#id, 'us.jnsq.handoff.PotentialProjectActor', admin)")
     def view(long id) {
         PotentialProjectActor.get(id)
     }
     
-    def listForUser() {}
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PostFilter("hasPermission(filterObject, read) or hasPermission(filterObject, admin)")
+    def listForUser(User user) {
+        PotentialProjectActor.withCriteria {
+            user {
+                eq("id", user.id)
+            }
+        }
+    }
     
-    def listForProject() {}
-    
-    @PreAuthorize("hasPermission(#ppa.project, admin)")
-    def approveApplication(PotentialProjectActor ppa) {
-        // create actor
-        // set PPA as inactive
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PostFilter("hasPermission(filterObject, read) or hasPermission(filterObject, admin)")
+    def listForProject(Project project) {
+        PotentialProjectActor.withCriteria {
+            project {
+                eq("id", project.id)
+            }
+        }
     }
     
     @PreAuthorize("hasPermission(#ppa.project, admin)")
-    def rejectApplication(PotentialProjectActor ppa, String reason) {}
+    def approveApplication(PotentialProjectActor ppa, String note) {
+        ppa.active = false
+        ppa.notes += "<div class=\"approved\">$note</div>"
+        ppa.save()
+        def actor = new Actor(
+            project: ppa.project,
+            user: ppa.user,
+            role: ppa.role
+        ).save(flush: true)
+        projectService.addPermission(ppa.project, ppa.user.username, BasePermission.READ)
+        actor
+    }
+    
+    @PreAuthorize("hasPermission(#ppa.project, admin)")
+    def rejectApplication(PotentialProjectActor ppa, String reason) {
+        ppa.active = false
+        ppa.notes += "<div class=\"rejected\">$reason</div>"
+        ppa.save(flush: true)
+    }
     
     @PreAuthorize("hasPermission(#ppa.project, read)")
-    def acceptInvitation(PotentialProjectActor ppa) {}
+    def acceptInvitation(PotentialProjectActor ppa, String note) {
+        ppa.active = false
+        ppa.notes += "<div class=\"accepted\">$note</div>"
+        ppa.save()
+        def actor = new Actor(
+            project: ppa.project,
+            user: ppa.user,
+            role: ppa.role
+        ).save(flush: true)
+        projectService.addPermission(ppa.project, ppa.user.username, BasePermission.READ)
+        actor
+    }
     
     @PreAuthorize("hasPermission(#ppa.project, read)")
-    def declineInvitation(PotentialProjectActor ppa, String reason) {}
+    def declineInvitation(PotentialProjectActor ppa, String reason) {
+        ppa.active = false
+        ppa.notes += "<div class=\"declined\">$reason</div>"
+        ppa.save(flush: true)
+    }
     
     def create(Project project, User user, Role role, String notes, String type) {
         def c = PotentialProjectActor.createCriteria().count {
@@ -53,7 +98,7 @@ class PpaService {
             project: project,
             user: user,
             role: role,
-            notes: notes,
+            notes: "<div class=\"description\">$notes</div>",
             type: type
         ).save(flush: true)
         addPermission(ppa, springSecurityService.authentication.name, BasePermission.ADMINISTRATION)
