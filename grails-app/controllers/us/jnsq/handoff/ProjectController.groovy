@@ -54,18 +54,6 @@ class ProjectController {
         }
     }
     
-    def approveApplication = {
-        def ppa = PotentialProjectActor.get(params.id)
-        projectService.approveApplication(ppa)
-        redirect action: 'view', id: ppa.project.id
-    }
-
-    def acceptInvitation = {
-        def ppa = PotentialProjectActor.get(params.id)
-        projectService.acceptInvitation(ppa)
-        redirect action: 'view', id: ppa.project.id
-    }
-    
     def leave = {
         def project = Project.get(params.id)
         if (!project) {
