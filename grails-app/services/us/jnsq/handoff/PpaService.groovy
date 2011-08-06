@@ -15,7 +15,7 @@ class PpaService {
     def aclPermissionFactory
     def aclUtilService
     def springSecurityService
-    def projectService
+    //def projectService
 
     @PreAuthorize("hasPermission(#id, 'us.jnsq.handoff.PotentialProjectActor', read) or hasPermission(#id, 'us.jnsq.handoff.PotentialProjectActor', admin)")
     def view(long id) {
@@ -52,7 +52,8 @@ class PpaService {
             user: ppa.user,
             role: ppa.role
         ).save(flush: true)
-        projectService.addPermission(ppa.project, ppa.user.username, BasePermission.READ)
+        //projectService.addPermission(ppa.project, ppa.user.username, BasePermission.READ)
+        addProjectPermission(ppa.project, ppa.user.username, BasePermission.READ)
         actor
     }
     
@@ -73,7 +74,8 @@ class PpaService {
             user: ppa.user,
             role: ppa.role
         ).save(flush: true)
-        projectService.addPermission(ppa.project, ppa.user.username, BasePermission.READ)
+        //projectService.addPermission(ppa.project, ppa.user.username, BasePermission.READ)
+        addProjectPermission(ppa.project, ppa.user.username, BasePermission.READ)
         actor
     }
     
@@ -117,6 +119,16 @@ class PpaService {
     @PreAuthorize("hasPermission(#ppa, admin)")
     void addPermission(PotentialProjectActor ppa, String username, Permission permission) {
         aclUtilService.addPermission(ppa, username, permission)
+    }
+    
+    void addProjectPermission(Project project, String username, int permission) {
+        addPermission(project, username, aclPermissionFactory.buildFromMask(permission))
+    }
+    
+    @Transactional
+    //@PreAuthorize("hasPermission(#ppa, admin)")
+    void addPermission(Project project, String username, Permission permission) {
+        aclUtilService.addPermission(project, username, permission)
     }
     
     @Transactional

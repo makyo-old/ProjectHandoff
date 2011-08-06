@@ -34,7 +34,7 @@ class ProjectService {
                         and {
                             eq("visibility", "actors")
                             actors {
-                                "in"("id", user.actors)
+                                "in"("id", user.actors.collect { it.id })
                             }
                         }
                     }

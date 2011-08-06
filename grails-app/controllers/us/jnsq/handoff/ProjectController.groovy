@@ -44,10 +44,10 @@ class ProjectController {
     }
     
     def join = {
-        def project = Project.get(params.project.id)
+        def project = Project.get(params.id)
         def role = Role.get(params.role.id)
         if (project && role) {
-            projectService.join(params.id)
+            projectService.join(project, role)
             redirect action: 'view', id: params.id
         } else {
             response.sendError(404)
