@@ -19,7 +19,16 @@
   <body>
     <input type="hidden" id="id" value="${role.id}" />
     <h3>Name</h3>
-    <p id="name">${role.name}</p>
+    <p id="name">
+      ${role.name}
+      <sec:ifLoggedIn>
+        -
+        <handoff:addToSelfOrNot roleID="${role.id}" not="(You are using this role)">
+          <g:link controller="role" action="addToSelf" id="${role.id}" class="ui-state-default ui-corner-all linkButton">Use role</g:link>
+        </handoff:addToSelfOrNot>
+      </sec:ifLoggedIn>
+      
+    </p>
     <h3>Description</h3>
     <p id="description">${role.description}</p>
     <p style="text-align: right;" id="editButtons">

@@ -26,7 +26,7 @@ class ProjectService {
                         and {
                             eq("visibility", "desiredRoles")
                             desiredRoles {
-                                "in"("id", user.roles)
+                                "in"("id", user.roles.collect { it.id })
                             }
                         }
                     }

@@ -16,9 +16,12 @@
   <body>
     <div id="workspace">
       <div id="projectInfo">
-        ${project.description}
+        <div>${project.description}</div>
         <hr />
         <h3>Desired Roles</h3>
+        <sec:ifLoggedIn>
+          <handoff:joinOrApplyButton project="${project}" alreadyIn="(You are a member of this project)" />
+        </sec:ifLoggedIn>
         <ul>
           <g:each in="${project.desiredRoles}" status="i" var="role">
             <li><g:link controller="role" action="view" id="${role.id}" title="${role.description}" class="tipsy">${role.name}</g:link></li>
