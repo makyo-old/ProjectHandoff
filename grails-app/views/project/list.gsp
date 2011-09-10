@@ -17,7 +17,7 @@
       <div class="listProject ${i % 2 == 0 ? 'odd' : 'even'}">
         <h3>
           <g:if test="${project.completed}"><s></g:if>
-          ${project.name}
+          <g:link controller="project" action="view" id="${project.id}">${project.name}</g:link>
           <g:if test="${project.completed}"></s></g:if>
         </h3>
         <p>${project.description}</p>

@@ -1,4 +1,5 @@
 *.jar
 *.class
 devDB.*
+target
 stacktrace.log

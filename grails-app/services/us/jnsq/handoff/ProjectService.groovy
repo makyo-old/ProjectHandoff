@@ -26,7 +26,7 @@ class ProjectService {
                         and {
                             eq("visibility", "desiredRoles")
                             desiredRoles {
-                                "in"("id", user.roles)
+                                "in"("id", user.roles.collect { it.id })
                             }
                         }
                     }
@@ -34,7 +34,7 @@ class ProjectService {
                         and {
                             eq("visibility", "actors")
                             actors {
-                                "in"("id", user.actors)
+                                "in"("id", user.actors.collect { it.id })
                             }
                         }
                     }

@@ -6,6 +6,8 @@ class RoleController extends grails.plugins.springsecurity.ui.RoleController {
 
     static defaultAction = 'list'
     
+    def springSecurityService
+    
     def secCreate = super.create
     
     def secEdit = super.edit
@@ -48,5 +50,12 @@ class RoleController extends grails.plugins.springsecurity.ui.RoleController {
         [role: Role.get(params.id)]
     }
     
-
+    @Secured(['ROLE_USER'])
+    def addToSelf = {
+        def role = Role.get(params.id)
+        def user = springSecurityService.currentUser
+        user.addToRoles(role)
+        user.save(flush: true)
+        redirect action: 'view', id: role.id
+    }
 }
