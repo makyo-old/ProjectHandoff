@@ -26,6 +26,16 @@
             <td><g:textArea name="description" id="roledescription" /></td>
           </tr>
           <tr>
+            <th class="ui-state-active ui-corner-left"><label for="hasMask">Permissions mask</label>:</th>
+            <td><g:checkBox name="hasMask" onchange="$(this).prop('checked') ? $('#mask').show() : $('#mask').hide()" /> Role has a permissions mask
+              <div id="mask" style="display: none">
+                <g:checkBox name="maskRead" value="on" /> Actors can read files<br />
+                <g:checkBox name="maskWrite" value="on" /> Actors can update files<br />
+                <g:checkBox name="maskInteract" value="on" /> Actors can interact with files<br />
+                <g:checkBox name="maskAdministrate" value="on" /> Actors can administrate files<br />
+              </div>
+            </td>
+          <tr>
             <th class="ui-state-active ui-corner-left">Role Fields:<br /><span class="light">A "notes" field is included automatically</span></th>
             <td>
               <div id="fields"><em>No fields</em></div><br />
@@ -39,3 +49,4 @@
     </g:form>
   </body>
 </html>
+<%-- ${true} --%>

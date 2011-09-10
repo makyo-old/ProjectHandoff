@@ -76,6 +76,7 @@ class ProjectService {
                 user: springSecurityService.currentUser,
                 role: role
             ).save(flush: true)
+            addPermission(project, actor.user.username, BasePermission.READ)
         } else {
             throw new AccessDeniedException()
         }

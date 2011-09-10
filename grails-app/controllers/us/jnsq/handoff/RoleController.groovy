@@ -32,6 +32,14 @@ class RoleController extends grails.plugins.springsecurity.ui.RoleController {
                     ).save(flush: true)
                 }
             }
+            if (params.hasMask)  {
+                def mask = new FilePermissions(
+                    read: params.maskRead == "on",
+                    write: params.maskWrite == "on",
+                    interact: params.maskInteract == "on",
+                    administrate: params.maskAdministrate == "on"
+                ).save(flush: true)
+            }
             redirect action: 'view', params: [id: role.id]
         }
     }
